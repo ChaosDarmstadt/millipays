@@ -1,0 +1,149 @@
+<style type='text/css'>
+/* form elements */
+form {
+  margin:0px;
+  padding: 0 0px;
+  background: #F5F5F5;
+}
+label {
+  display:block;
+  font-weight:bold;
+  margin:5px 0;
+}
+input {
+  padding:2px;
+  border:1px solid #eee;
+  font: normal 1em Verdana, sans-serif;
+  color:#777;
+}
+textarea {
+  width:400px;
+  padding:2px;
+  font: normal 1em Verdana, sans-serif;
+  border:1px solid #eee;
+  height:100px;
+  display:block;
+  color:#777;
+}
+input.button {
+  font: bold 12px Arial, Sans-serif;
+  height: 24px;
+  margin: 0;
+  padding: 2px 3px;
+  color: #333;
+  background: #e7e6e6 url(MarketPlace-images/button.jpg) repeat-x;
+  border: 1px solid #dadada;
+}
+</style>
+
+
+
+{% if error %}<p><strong>{{ error }}</strong></p>{% endif %}
+
+{% if product_list %}
+<table>
+    <tr>
+        <th>Produkt</th>
+        <th>Preis</th>
+    </tr>
+    {% for product in product_list %}
+    <tr>
+        <td>
+             <form action="" method="post">
+                 {% csrf_token %}
+                 <input type="hidden" name="barcode" value="{{product.barcode}}">
+                 <input type="hidden" name="function" value="add">
+                 <input type="submit" value="{{ product.name }}" />
+             </form>
+        </td>
+        <td>
+            {{ product.price }}€
+        </td>
+    </tr>
+    {% endfor %}
+    </table>
+<form action="" method="post">
+    {% csrf_token %}
+    <table>
+        <tr>
+            <td>
+                <label for="bcs">Barcode</label>
+            </td>
+            <td>
+                <input type="text" name="barcode" id="bcs" autofocus="autofocus">
+                <input type="hidden" name="function" value="add" >
+            </td>
+        </tr>
+    </table>
+</form>
+
+{% else %}
+    <p>Alles ausverkauft. Matekalypse! Routerkalypse! Snackolypse!!</p>
+{% endif %}
+
+{% if cart_list %}
+<table>
+    <tr>
+        <th>Menge</th>
+        <th>Artikel</th>
+        <th>Einzeln</th>
+        <th>Gesamt</th>
+    </tr>
+    {% for product in cart_list %}
+    <tr>
+        <td>{{ product.count }}</td>
+        <td>
+            <form action="" method="post">
+                 {% csrf_token %}
+                 <input type="hidden" name="barcode" value="{{product.barcode}}">
+                 <input type="hidden" name="function" value="del">
+                 <input type="submit" value="{{ product.name }}" />
+             </form>
+        </td>
+        <td>{{ product.price }}€</td>
+        <td>{{ product.total_price }}€</td>
+    </tr>
+    {% endfor %}
+    <tr>
+        <td colspan="3"><strong>Gesamtpreis:</strong></td>
+        <td> <strong>{{ total_price }}€</strong></td>
+    </tr>
+</table>
+<table>
+    <tr>
+        <td>
+         <form action="" method="post">
+             {% csrf_token %}
+             <input type="hidden" name="function" value="rst">
+             <input type="submit" value="Abbrechen" />
+         </form>
+        </td>
+        <td>
+
+             {% if member_list %}
+                 als
+        </td>
+        <td>
+             <form action=""  method="post">
+                 {% csrf_token %}
+                <select size="1"  name="selected_member" onchange="this.form.submit()">
+                    {% for member in member_list %}
+                        <option  value="{{ member }}" {% if member == request.session.cart %} selected {% endif %}>{{ member }}</option>
+                    {% endfor %}
+                </select>
+            </form>
+        </td>
+        <td>
+             {% endif %}
+            <form action="" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="function" value="buy">
+                <input type="submit" value="Kaufen" />
+            </form>
+        </td>
+    </tr>
+</table>
+{% else %}
+    <p>Dein Warenkorb ist leer.</p>
+{% endif %}
+
