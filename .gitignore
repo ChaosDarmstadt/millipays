@@ -1,1 +1,6 @@
+# python bytecode
 *.pyc
+__pycache__
+
+# project-generated
+db.sqlite3
