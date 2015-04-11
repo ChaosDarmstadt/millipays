@@ -5,15 +5,17 @@ from django.db import models
 #  3 icet 4029764001814
 # matemagier 4029764001807
 
+
 class Product(models.Model):
     barcode = models.CharField(max_length=13)
     price = models.FloatField()
-    stock= models.IntegerField()
+    stock = models.IntegerField()
     name = models.CharField(max_length=20)
     member_discount = models.FloatField(default=0.5)
 
     def __str__(self):
         return self.name
+
 
 # Die Barkasse ist auch ein Member
 class Member(models.Model):
@@ -26,6 +28,7 @@ class Member(models.Model):
     def __str__(self):
         return self.nick
 
+
 # Alle Käufe im CashLog müssen schlüssig mit dem aktuellen Stand an Products.stock und Member.balance sein
 # Member x kaufte Produkt y
 class CashLog(models.Model):
@@ -34,4 +37,3 @@ class CashLog(models.Model):
     count = models.IntegerField(default=0)
     price = models.FloatField(default=0)
     purchase_date = models.DateTimeField('date purchased')
-
