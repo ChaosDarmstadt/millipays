@@ -82,7 +82,7 @@ def index(request, error=''):
                 else:
                     request.session[ean] = 1
             else:
-                error = 'Produkt konte nicht hinzugefügt werden: EAN ist nicht bekannt!'
+                error += 'Produkt konte nicht hinzugefügt werden: EAN ist nicht bekannt!\n'
 
         elif func == 'del':
             # remove product from cart
@@ -92,7 +92,7 @@ def index(request, error=''):
                 else:
                     del request.session[ean]
             else:
-                error = 'Produkt konnte nicht entfernt werden: EAN ist nicht bekannt!'
+                error += 'Produkt konnte nicht entfernt werden: EAN ist nicht bekannt!\n'
 
         else:
             error += 'Unknown function call\n'
@@ -126,7 +126,9 @@ def index(request, error=''):
     total_price = 0
     for product in Product.objects.order_by('-name'):
         if not product.stock <= 0:
-            if request.session.get('isMember', True):
+            if product.name == 'UeberweisungsPrepaid':
+                continue
+            elif request.session.get('isMember', True):
                 product.price -= product.member_discount
             # if not a member dont add Product Prepaid from product list
             elif product.name == 'Prepaid':

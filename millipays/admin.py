@@ -16,7 +16,7 @@ class PrepaidAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         if not obj.addPrepaid == 0:
-            cs = CashLog(member=obj, product=Product.objects.get(name='Prepaid'),
+            cs = CashLog(member=obj, product=Product.objects.get(name='UeberweisungsPrepaid'),
                          count=1, price=-obj.addPrepaid, purchase_date=timezone.now())
             cs.save()
             obj.balance += obj.addPrepaid
