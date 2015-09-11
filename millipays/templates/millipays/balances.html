@@ -1,0 +1,27 @@
+<html>
+<head>
+<title>Balances</title>
+</head>
+
+<body>
+<h2>Balances</h2>
+
+<table class="table table-striped">
+    <thead>
+       <tr>
+            <th>Member</th>
+            <th>Balance</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for member in members %}
+        <tr>
+            <td>{{ member.nick }}</td>
+            <td>{{ member.balance }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</body>
+
+</table>
